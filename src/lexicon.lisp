@@ -11,14 +11,14 @@
 
 (in-package :langutils)
 
-;; For logging
-(deflog lexicon-init (tagger))
-
 ;; -----------------------------
 ;; LEXICON
 
 ;; The Lexicon
 (defvar *lexicon* nil)
+
+(defmacro with-static-memory-allocation (() &rest body)
+  `(progn ,@body))
 
 ;; Loading the lexicon
 (defun init-lexicon (&optional lexicon-file lemma-file)
@@ -34,14 +34,14 @@
       (with-static-memory-allocation ()
 	(write-log lexicon-init "Reading lexicon from ~A" lexicon-file)
 	;; Parse the lines into a predicate ID and two node structures
-	(with-open-file ( s lexicon-file )
+	(with-open-file ( s lexicon-file :external-format :ascii)
 	  (do-count-contentful-lines (l count s)
 	    (when (= (mod count 10000) 0) (write-log lexicon-init "Processed ~A lines" count))
 	    (let ((lexicon-entry (extract-words l))) ;; (pregex:split "\\s+" l)))
 	      (add-basic-entry (car lexicon-entry) (mapcar #'mkkeysym (cdr lexicon-entry))))))
 	(write-log lexicon-init "Reading word->lemma data from ~A" lemma-file)
 	;; Parse the lines into a predicate ID and possible roots
-	(with-open-file ( s lemma-file )
+	(with-open-file ( s lemma-file :external-format :ascii)
 	  (do-count-contentful-lines (l count s)
 	    (when (= (mod count 10000) 0) (write-log lexicon-init "Processed ~A lines" count))
 	    (let ((roots-entry (extract-words l)))
@@ -122,7 +122,7 @@
       entry)))
 
 (defun make-cases ( word )
-  (declare (type (string word)))
+;;  (declare (type (string word)))
   (let ((all-cases 
 	 (mapcar #'id-for-token
 		 (list (string-downcase word)

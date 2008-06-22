@@ -16,14 +16,14 @@
 ;; Concept class definition
 ;;
 
-(defclass-exported concept ()
+(defclass concept ()
   ((token-vector ;; vector of token ids for words
     :reader token-vector
     :initarg :token-vector
     #-mcl :type #-mcl (array fixnum)
     :documentation "Stores the representation of the concept as an array of token ids")))
 
-(eval-when (compile load eval)
+(eval-when (:compile-toplevel :load-toplevel)
   (export 'token-vector))
 
 (defmethod print-object ((cn concept) stream)
@@ -41,10 +41,10 @@
   "Take a token array and see if there is already a 
    concept instance"
 ;;  (vechash-get ta *concept-vhash*))
-  (utils.gds:get-value *concept-vhash* ta))
+  (stdutils.gds:get-value *concept-vhash* ta))
 
 (defmethod clear-concept-cache ()
-  (setf *concept-vhash* (make-instance 'utils.gds:vector-keyed-table)))
+  (setf *concept-vhash* (make-instance 'stdutils.gds:vector-keyed-table)))
 
 (defparameter *concept-store-scratch-array* (make-array 20 :element-type 'fixnum :adjustable t)
   "Allows us to lookup concepts from arrays without allocating lots of unnecessary data")
@@ -52,11 +52,11 @@
 (defmethod lookup-canonical-concept-instance ((lf list))
   "List of fixnums to lookup a concept instance"
 ;;  (vechash-get lf *concept-vhash*))
-  (utils.gds:get-value *concept-vhash* (list->array lf)))
+  (stdutils.gds:get-value *concept-vhash* (list->array lf)))
 
 (defmethod register-new-concept-instance ((c concept))
 ;;  (vechash-put (token-vector c) c *concept-vhash*)
-  (setf (utils.gds:get-value *concept-vhash* (token-vector c)) c)
+  (setf (stdutils.gds:get-value *concept-vhash* (token-vector c)) c)
   c)
 
 ;;

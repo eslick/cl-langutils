@@ -71,9 +71,8 @@
 ;; Reads a stream into a string
 #.(enable-meta-syntax)
 (let* ((length 1024)
-       (result (make-array length :element-type 'base-char :adjustable t)))
-  (declare (type (array 'base-char (*)) result)
-	   (type fixnum length))
+       (result (make-array length :element-type 'character :adjustable t)))
+  (declare (type fixnum length))
 (defun tokenize-stream (stream &key (by-sentence nil) (fragment "")
 			       &aux (index 0) (start 0) (ch #\Space) (ws #\Space)
 			            (status :running) (sentence? nil))
@@ -87,7 +86,7 @@
 	   (type character ch ws)
 	   (type boolean sentence?)
 	   (inline peek-char read-char char)
-	   (optimize (speed 3) (safety 0)))
+	   (optimize (speed 3) (safety 0) (debug 1)))
   (with-stream-meta (str stream)
       (macrolet ((copy-fragment ()
 				`(progn 
@@ -97,7 +96,7 @@
 				     `(progn
 					(setq index (length fragment))
 					(setq result (make-array index
-								 :element-type 'base-char
+								 :element-type 'character
 								 :adjustable t
 								 :initial-contents fragment))
 					(when (> length index)
@@ -155,9 +154,7 @@
 						       (or (eq code (char-code #\_))
 							   (eq code (char-code #\-))))))
 				     (swap (a b &aux temp)
-					   (declare (type base-char a b temp)
-						    (type (vector base-char) result)
-						    (optimize speed (safety 0))
+					   (declare (optimize speed (safety 0))
 						    (inline char))
 					   (setf temp (char result a))
 					   (setf (char result a) (char string b))
@@ -175,8 +172,8 @@
 						    (delete-chars #\Space write spaces))
 				     (delete-chars (char write count &aux (read write) (orig write))
 						    (declare (type fixnum write read count)
-							     (type base-char char)
-							     (type (vector base-char) result)
+;;							     (type character char)
+							     (type (vector character) result)
 							     (optimize speed (safety 0)))
 						    (loop while (< write end) do
 						      (if (and (< (- read write) count)
@@ -204,7 +201,7 @@
 				     ;; Fix possessives such as Fred (Fred ' s -> Fred's)
 				     (fix-poss (&aux (old-index index) a d) 
 					       (declare (type fixnum old-index index)
-							(type base-char a d)
+;;							(type character a d)
 							(optimize speed (safety 0)))
 					       (or
 						(meta-match
@@ -223,7 +220,7 @@
 				     (fix-numerics (&aux (old-index index) d);; 2 : 00 -> 2:00 
 						   (or
 						    (meta-match
-						    [@(digit d) {#\Space} {#\: #\, #\/} {#\Space} @(digit d)
+						    [@(digit d) {#\Space} { #\: #\, #\/ } { #\Space } @(digit d)
 						    !(delete-spaces (- index 4) 2)])
 						    (progn (setq index old-index) nil)))
 				     ;; Ignore abbreviations from the list and keep period marker
@@ -238,8 +235,8 @@
 						  (declare (optimize speed (safety 0))
 							   (inline aref char)
 							   (type string result)
-							   (type fixnum old-index index)
-							   (type base-char a ws))
+							   (type fixnum old-index index))
+;;							   (type character a ws))
 ;;						  (format t "~A~%" (subseq string index end))
 						  (or 
 						   (meta-match  ;; Assume sentence if not pass these filters
@@ -247,13 +244,13 @@
 ;;						     [@(whitespace ws) @(alpha a) #\. @(whitespace ws) 
 ;;						      !(delete-chars #\. (- index 2) 1)] 
 						          ;; Prop. , but -> Prop , but
-						     [#\. {[${@(whitespace ws)} {#\, #\;}]
+						     [ #\. { [ ${ @(whitespace ws) } { #\, #\; } ]
 						           ;; U.S. & m.p.h. -> U.S m.p.h
-						           [!(test-alpha) #\. @(whitespace ws)]}]
+						           [ !(test-alpha) #\. @(whitespace ws) ] } ]
 						     ;; Sentence end?: "word word. {W/w}"
 						     [@(non-punc-or-white ws) #\. @(whitespace ws) !(potential-sentence)]
 						     ;; Definitely a sentence!
-						     [{#\! #\?} @(whitespace ws) !(write-newline  (1- index))]
+						     [{ #\! #\? } @(whitespace ws) !(write-newline  (1- index))]
 						    })
 						   (progn (setq index old-index) nil))))
 			      ;; NOTE: insert period handling and sentence detection

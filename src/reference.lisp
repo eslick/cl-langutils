@@ -204,8 +204,8 @@
 	  (dtext (document-text doc))
 	  (ptags (document-tags (phrase-document p)))
 	  (dtags (document-tags doc)))
-      (declare (type (array fixnum *) ptext dtext)
-	       (type (array symbol *) ptext dtext))
+      (declare (type (array fixnum *) dtext)
+	       (type (array symbol *) ptext))
       (labels ((match-tokens (doc-offset phrase-offset)
 		 (declare (type fixnum doc-offset phrase-offset))
 		 (if (and ignore-start ignore-end

@@ -42,6 +42,12 @@
 ;; Speed: slow
 ;; Input size: Works on small files
 
+(defun read-file-to-string (file)
+  (with-output-to-string (stream)
+    (with-open-file (file file)
+      (do-stream-lines (line file)
+	(format stream "~A~%" line)))))
+
 (defun-exported read-file-as-tagged-document (file)
   (vector-tag (read-file-to-string file)))
 
@@ -64,7 +70,7 @@
 				data)))
 (let ((temp-tokens (make-array 100000 :element-type 'fixnum :initial-element 0 :adjustable t))
       (temp-tags (make-array 100000 :element-type 'symbol :initial-element :NN :adjustable t))
-      (temp-string (make-array 10000 :initial-element #\a :element-type 'base-char :fill-pointer t :adjustable nil)))
+      (temp-string (make-array 10000 :initial-element #\a :element-type 'character :fill-pointer t :adjustable nil)))
   (declare (optimize (speed 3) (safety 0) (debug 0))
 	   (type (array fixnum (*)) temp-tokens)
 	   (type (array symbol (*)) temp-tags)
@@ -72,7 +78,7 @@
   (defun write-temp ( token tag pos )
     (declare (type fixnum token pos)
 	     (type symbol tag)
-	     (optimize (speed 3) (safety 0) (debug 0) (size 0)))
+	     (optimize (speed 3) (safety 0) (debug 0) (space 0)))
     (setf (aref temp-tokens pos) token)
     (setf (aref temp-tags pos) tag)
     nil)
@@ -80,7 +86,7 @@
   (defun duplicate-from ( source start end )
     (declare (inline aref)
 	     (type fixnum source start end)
-	     (optimize (speed 3) (safety 0) (debug 0) (size 0)))
+	     (optimize (speed 3) (safety 0) (debug 0) (space 0)))
     (loop for pos fixnum from start to (1- end) do
 	  (progn 
 	    (setf (aref temp-tokens pos) (aref temp-tokens source))
@@ -97,7 +103,7 @@
      compilers can open-code the array refs and simplify the calling 
      of the labels functions.
     "
-    (declare (optimize (speed 3) (safety 1) (size 0) (debug 0)))
+    (declare (optimize (speed 3) (safety 1) (space 0) (debug 0)))
     (labels ((initial-tag-all ()
 			      (let ((array-offset 3)
 				    (temp-index 0))
@@ -137,7 +143,7 @@
 	(return-vector-doc elements))))
 
   (defun apply-contextual-rules (elements)
-    (declare (optimize (speed 3) (safety 1) (size 0) (debug 0))
+    (declare (optimize (speed 3) (safety 1) (space 0) (debug 0))
 	     (type fixnum elements))
 ;;    (with-print-clock-cycles (1.67 :unit-name "cycles per rule app" :norm-f 
 ;;			  #'(lambda (cycles) (/ cycles (* elements (length *tagger-contextual-rules*) 1.0))))
@@ -146,7 +152,7 @@
 		  (funcall rule temp-tokens temp-tags pos))))
 
   (defun return-vector-doc (elements)
-    (declare (optimize (speed 3) (safety 0) (size 0) (debug 0)))
+    (declare (optimize (speed 3) (safety 0) (space 0) (debug 0)))
     (make-instance 'vector-document 
 		   :text (subseq temp-tokens 3 (+ elements 3))
 		   :tags (subseq temp-tags 3 (+ elements 3)))))
@@ -180,10 +186,7 @@
   ;; Handle vector tags and tokens
   (unless (and *tagger-lexical-rules* *tagger-contextual-rules*)
     ;; Load the files
-    (load-tagger-files (aif lexical-rule-file it 
-			    (translate-logical-pathname "think:data;lang;en;langutils;LEXICALRULEFILE-BROWN.txt"))
-		       (aif contextual-rule-file it 
-			    (translate-logical-pathname "think:data;lang;en;langutils;CONTEXTUALRULEFILE-BROWN.txt")))))
+    (load-tagger-files lexical-rule-file contextual-rule-file)))
 
 (defun load-tagger-files ( lexical-rules contextual-rules &key bigrams wordlist )
   (declare (ignore bigrams wordlist))

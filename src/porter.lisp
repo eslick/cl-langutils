@@ -358,8 +358,8 @@
 
 #+never
 (defun test ()				; Run against the distributed test files.
-  (with-open-file (f1 "voc.txt")
-    (with-open-file (f2 "output.txt")
+  (with-open-file (f1 "voc.txt" :external-format :ascii)
+    (with-open-file (f2 "output.txt" :external-format :ascii)
       (loop as w1 = (read-line f1 nil nil)
 	  while w1
 	  as w2 = (read-line f2 nil nil)

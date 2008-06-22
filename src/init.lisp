@@ -25,59 +25,39 @@
 ;; your own token map at some point.
 ;; 
 
-(defvar *default-token-map-file* nil
-  "Path to the token map file")
-(defvar *default-lexicon-file* nil
-  "Path to the lexicon file")
-(defvar *default-stems-file* nil
-  "Path to the word stems file")
-(defvar *default-lexical-rule-file* nil
-  "Path to the brill lexical rule file")
-(defvar *default-contextual-rule-file* nil
-  "Path to the brill contextual rule file")
-(defvar *default-stopwords-file* nil
-  "Path to a stopwords file")
-(defvar *default-concise-stopwords-file* nil
-  "Path to a *very* small list of words. Mainly pronouns and determiners")
-
 (defun init-langutils ()
   (when (if *external-token-map*
 	    (and (not *lexicon*) *token-counter-hook*)
 	    (not *lexicon*))
     (format t "Initializing langutils...~%")
-;;    (start-logging lexicon-init)
-    
+
     ;; Token maps
     (initialize-tokens)
     (unless *external-token-map*
       (reset-token-counts)
-      (aif *default-token-map-file* (load-token-map it))
-      (port:gc))
+      (aif *default-token-map-file* (load-token-map it)))
 
     ;; Lexicon (virtualize init?)
-    (format t "Loading lexicon...~%")
-    (time
-     (init-lexicon *default-lexicon-file* *default-stems-file*))
-    (port:gc)
+    (unless *lexicon*
+      (format t "Loading lexicon...~%")
+      (time
+       (init-lexicon *default-lexicon-file* *default-stems-file*)))
 
-  ;; Tagger
-  (format t "Loading tagger rule sets...~%")
-  (init-tagger *default-lexical-rule-file* *default-contextual-rule-file*)
-  (port:gc)
+    ;; Tagger
+    (unless (and *tagger-lexical-rules* *tagger-contextual-rules*)
+      (format t "Loading tagger rule sets...~%")
+      (init-tagger *default-lexical-rule-file* *default-contextual-rule-file*))
 
-  ;; Stopword db
-  (format t "Finishing miscellaneous langutils setup.~%")
-  (init-stopwords *default-stopwords-file*)
-  (init-concise-stopwords *default-concise-stopwords-file*)
-  (port:gc)
+    ;; Stopword db
+    (format t "Finishing miscellaneous langutils setup.~%")
+    (init-stopwords *default-stopwords-file*)
+    (init-concise-stopwords *default-concise-stopwords-file*)
 
-  ;; Concepts
-  (clear-concept-cache)
-  (port:gc)
+    ;; Concepts
+    (clear-concept-cache)
 
-;;    (stop-logging lexicon-init)
-  (format t "Done initializing langutils.~%")
-  t))
+    (format t "Done initializing langutils.~%")
+    t))
 
 (defun clean-langutils ()
   (reset-token-counts)
@@ -89,5 +69,9 @@
 
 (defun reset-langutils ()
   (clean-langutils)
-  (port:gc)
   (init-langutils))
+
+(eval-when (:load-toplevel)
+  ;; Read config
+  (when *auto-init*
+    (init-langutils)))

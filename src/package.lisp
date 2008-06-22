@@ -5,7 +5,7 @@
 
 
 (defpackage #:langutils
-  (:use #:cl #:meta #:utils) ;; #:s-serialization)
+  (:use #:cl #:meta #:stdutils) ;; #:s-serialization)
   (:export   ;; initialization
            init-langutils
 	   clean-langutils

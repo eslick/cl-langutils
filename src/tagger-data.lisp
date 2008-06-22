@@ -13,11 +13,6 @@
 (in-package :langutils)
 
 ;; -----------------------------------
-;; Define a logging heirarchy
-(deflog tagger-contextual (tagger))
-(deflog tagger-lexical (tagger))
-
-;; -----------------------------------
 ;; Contextual rule files
 
 ;;
@@ -64,9 +59,9 @@ Macroexpand this to see code for a single rule closure:
 
 (defun load-contextual-rules ( rule-file &aux rules )
   (write-log tagger-init "Loading contextual rules")
-  (with-open-file ( s rule-file )
+  (with-open-file ( s rule-file :external-format :ascii)
     (do-contentful-lines (line s ) ;; :count count)
-      (let* ((context-rule (pregex:split "\\s+" line))
+      (let* ((context-rule (ppcre:split "\\s+" line))
 	     (closure (make-contextual-rule context-rule)))
 	(if closure (push closure rules)))))
   (nreverse rules))
@@ -79,9 +74,9 @@ Macroexpand this to see code for a single rule closure:
   "Return a list of closure implementing the lexical rules
    in rule-file to tag words not found in the lexicon"
   (write-log tagger-init "Loading lexical rules")
-  (with-open-file ( s rule-file )
+  (with-open-file ( s rule-file :external-format :ascii)
     (do-contentful-lines (line s)
-      (let ((lex-rule (pregex:split "\\s+" line)))
+      (let ((lex-rule (ppcre:split "\\s+" line)))
 	(let ((rule (make-lexical-rule lex-rule *lexicon* bigram-hash word-hash)))
 	  (if rule (push rule rule-list))))))
   (nreverse rule-list))
@@ -106,21 +101,20 @@ Macroexpand this to see code for a single rule closure:
   "Look through list for rule name"
   (declare (ignore bh)
 	   (inline strncmp list eq equal char subseq strncmp-end2 length concatenate)
-	   (optimize (speed 3) (safety 0) (debug 0)))
+	   (optimize (speed 0) (safety 3) (debug 3)))
   (let ((name (second list))
 	(fname (third list)))
     (cond ((string= name "char")
 	   (let ((prefix (char (first list) 0)) 
 		 (new-tag (mkkeysym (third list))))
 	     (declare (type character prefix)
-		      (type symbol new-tag)
-		      (symbol pair))
+		      (type symbol new-tag))
 	     #'(lambda (pair)
-		 (declare (type cons pair) (inline schar))
+		 (declare (type cons pair) (inline char))
 		 (let ((token (car pair))
 		       (tag (cdr pair)))
 		   (declare (type string token) (type symbol tag) (ignore tag))
-		   (if (eq prefix (schar token 0))
+		   (if (eq prefix (char token 0))
 		       (progn (setf (cdr pair) new-tag) pair)
 		     pair)))))
 	  ((string= fname "fchar")
@@ -129,12 +123,12 @@ Macroexpand this to see code for a single rule closure:
 		 (new-tag (mkkeysym (fourth list))))
 	     (declare (type symbol old-tag new-tag) (type character prefix))
 	     #'(lambda (pair)
-		 (declare (type cons pair) (inline schar))
+		 (declare (type cons pair) (inline char))
 		 (let ((token (car pair))
 		       (tag (cdr pair)))
 		   (declare (type string token) (type symbol tag))
 		   (if (and (eq tag old-tag)
-			    (eq prefix (schar token 0)))
+			    (eq prefix (char token 0)))
 		       (progn (setf (cdr pair) new-tag) pair)
 		     pair)))))
 	  ((string= name "deletepref")
@@ -343,16 +337,18 @@ Macroexpand this to see code for a single rule closure:
 ;;	     #'(lambda (token tag)
 ;; NOTE: NO BIGRAM SUPPORT YET
 ;; "goodleft" "fgoodleft" "goodright" "fgoodright"
-	  (t (write-log tagger-contextual "No rule found for: ~A." list)))))
+	  (t (progn 
+	       (write-log tagger-contextual "No rule found for: ~A." list)
+	       nil)))))
 
 
 (defun apply-rules ( datum rule-list )
   "Apply rules to the values in values presuming that
    the returned list is also a list of values that can
    be passed to the next rule"
-  (declare (optimize (speed 3) (safety 0) (debug 0) (space 0))
+  (declare (optimize (speed 3) (safety 1) (debug 1) (space 0))
 	   (type list rule-list)
-	   (type cons datum))
+	   (type list datum))
   (cond ((null rule-list)
 	 datum)
 	((null datum)

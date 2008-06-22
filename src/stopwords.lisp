@@ -24,14 +24,14 @@
   (when (null path) (setf path (translate-logical-pathname "think:data;lang;en;langutils;stopwords.txt")))
   (setf *stopwords* (make-hash-table :test #'equal :size 1000))
   (init-word-test)
-  (with-open-file (f path )
+  (with-open-file (f path :external-format :ascii)
     (do-contentful-lines (line f)
       (hash-put *stopwords* (id-for-token (string-trim " " line)) t))))
 
 (defun init-concise-stopwords (&optional path)
   (when (null path) (setf path  (translate-logical-pathname "think:data;lang;en;langutils;concise-stopwords.txt")))
   (setf *concise-stopwords* (make-hash-table :test #'equal :size 10))
-  (with-open-file (f path )
+  (with-open-file (f path :external-format :ascii)
     (do-contentful-lines (line f)
       (hash-put *concise-stopwords* (id-for-token (string-trim " " line)) t))))
 

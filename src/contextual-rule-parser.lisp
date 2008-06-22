@@ -84,7 +84,7 @@
 		((not (consp exp))
 		 (format t "Parser error in macro, '(+1 tag1) form expected got ~A" exp))
 		((eq (car exp) 'or)
-		 (gen-rule-arg-bindings (cdr exp)))
+		 (gen-rule-arg-bindings (list (cadr exp))))
 		(t (list
 		    (get-bind-entry
 		     (get-arg exp))))))))
