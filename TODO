@@ -1,0 +1,20 @@
+To clean up:
+- Separate out utils for distribution
+- Performance comparisons
+  - vs. Brill C code and Allegro
+  - vs. SBCL and CLISP
+
+Easy enhancements:
+- Anaphor resolution i/f in linear text
+- Lexical bigram file support for tagger
+- Direct support for wordlist for tagger
+
+Potential new work:
+- Alternative chunking
+  Label objects, actions and events from lexicon & commonsense
+- Commonsense constraint based parser
+  - Could learn ala-brill
+    Either a surprising verb pattern means an object can do x or y is the effect of x
+    or we have a new syntactic rule or word role?
+- Link grammar parser
+
