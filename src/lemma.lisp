@@ -89,8 +89,9 @@
 			       (aif (select (car orig) orig) 
 				    (cons it new) 
 				    new)))))
-    (assert (integerp (car sequence)))
-    (descend sequence nil)))
+    (when sequence
+      (assert (integerp (car sequence)))
+      (descend sequence nil))))
       
 
 (defmethod-exported lemmatize ((sequence array) &key strip-det pos (noun t) porter last-only)
