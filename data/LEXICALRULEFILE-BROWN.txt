@@ -1,0 +1,134 @@
+NN s fhassuf 1 NNS x
+ed hassuf 2 VBN x
+ing hassuf 3 VBG x
+ly hassuf 2 RB x
+ly addsuf 2 JJ x
+- char JJ x
+1 char CD x
+NN ic fhassuf 2 JJ x
+NN to fgoodright VB x
+NNS ss fhassuf 2 NN x
+NN ble fhassuf 3 JJ x
+NN al fhassuf 2 JJ x
+0 char CD x
+VB the fgoodright NN x
+NNS us fhassuf 2 JJ x
+NN ive fhassuf 3 JJ x
+he goodright VBD x
+un deletepref 2 JJ x
+2 char CD x
+NN y fdeletesuf 1 JJ x
+JJ of fgoodleft NN x
+NN est fhassuf 3 JJS x
+ts hassuf 2 NNS x
+4 char CD x
+NN less fhassuf 4 JJ x
+NNS the fgoodleft VBZ x
+NNS is fhassuf 2 NN x
+VBD s fhassuf 1 VBZ x
+men deletesuf 3 NNS x
+ness addsuf 4 JJ x
+ions hassuf 4 NNS x
+NNP the fgoodleft IN x
+JJ rs fhassuf 2 NNS x
+ly hassuf 2 RB x
+NN ary fhassuf 3 JJ x
+1 addpref 1 CD x
+NN his fgoodleft IN x
+JJ ion fhassuf 3 NN x
+years goodleft CD x
+ment addsuf 4 VB x
+NN had fgoodright VBN x
+ful hassuf 3 JJ x
+NN ize fhassuf 3 VB x
+NN lar fhassuf 3 JJ x
+CD h fhassuf 1 JJ x
+CD a fchar JJ x
+JJ B fchar NNP x
+NN was fgoodright JJ x
+VBN ked fhassuf 3 VBD x
+JJ M fchar NNP x
+ness hassuf 4 NN x
+NN ate fhassuf 3 VB x
+VB the fgoodright NN x
+NN than fgoodleft JJR x
+VBZ the fgoodright NNS x
+NNP ans fhassuf 3 NNPS x
+these goodleft IN x
+VBN He fgoodright VBD x
+NN 3 fchar CD x
+'ll goodleft PRP x
+ing deletesuf 3 VBG x
+NN a fdeletepref 1 RB x
+JJ es fhassuf 2 NNS x
+JJ D fchar NNP x
+like deletesuf 4 JJ x
+NN tory fhassuf 4 JJ x
+JJ is fgoodleft NN x
+VBD have fgoodleft MD x
+NNS ates fhassuf 4 VBZ x
+VBG is fgoodleft NN x
+some hassuf 4 JJ x
+JJS s faddsuf 1 NN x
+MD was fgoodright RB x
+NN id fhassuf 2 JJ x
+own goodleft PRP$ x
+JJ s fdeletesuf 1 NNS x
+ity hassuf 3 NN x
+NN ish fdeletesuf 3 JJ x
+JJ nce fhassuf 3 NN x
+fies hassuf 4 VBZ x
+ors hassuf 3 NNS x
+VBN ped fhassuf 3 VBD x
+NNP ses fhassuf 3 NNPS x
+NN ity faddsuf 3 JJ x
+JJ W fchar NNP x
+wise deletesuf 4 RB x
+7 char CD x
+izes hassuf 4 VBZ x
+self deletesuf 4 PRP x
+JJ G fchar NNP x
+VBN owed fhassuf 4 VBD x
+VB a fgoodright NN x
+JJ H fchar NNP x
+'ll goodright VB x
+JJ 's fgoodleft NN x
+five hassuf 4 CD x
+teen hassuf 4 CD x
+NNS oses fhassuf 4 VBZ x
+body addsuf 4 DT x
+VBG of fgoodleft NN x
+NNS es faddsuf 2 NN x
+lent hassuf 4 JJ x
+NNP ces fhassuf 3 NNS x
+JJ sal fhassuf 3 NN x
+JJ mble fhassuf 4 NN x
+JJ I fchar NNP x
+enth hassuf 4 JJ x
+ify hassuf 3 VB x
+VBN eed fhassuf 3 NN x
+JJ er fhassuf 2 NN x
+NN ward fdeletesuf 4 RB x
+VBD are fgoodright VBN x
+VBN kled fhassuf 4 VBD x
+NNS en fdeletepref 2 VBZ x
+gled hassuf 4 VBD x
+JJ Y fchar NN x
+JJ re- fdeletepref 3 NN x
+JJ ery fhassuf 3 NN x
+Br haspref 2 NNP x
+CD p fchar JJ x
+CD . fhassuf 1 JJ x
+VBN Un fdeletepref 2 JJ x
+NN ky fhassuf 2 JJ x
+NN ern fdeletesuf 3 JJ x
+NN tty fhassuf 3 JJ x
+VBN scr fhaspref 3 VBD x
+udes hassuf 4 VBZ x
+VBZ the fgoodright NNS x
+NNS which fgoodright VBZ x
+NNPS l fchar NNS x
+Some deletepref 4 RB x
+body deletesuf 4 NN x
+NN most fhassuf 4 JJ x
+VBN en faddpref 2 VBD x
