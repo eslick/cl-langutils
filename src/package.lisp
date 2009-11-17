@@ -61,6 +61,7 @@
 	   make-alterable-phrase
            ;; tokens
 	   id-for-token
+	   ids-for-tokens
 	   token-for-id
 	   tokens-for-ids
 	   save-tokens
@@ -102,8 +103,8 @@
 	   chunk-tokenized
 	   all-chunks
 	   get-event-chunks
-	   get-noun-chunks
-	   get-verb-chunks
+	   get-extended-event-chunks1
+	   get-extended-event-chunks2
 	   get-nx-chunks
 	   get-vx-chunks
 	   get-adverb-chunks

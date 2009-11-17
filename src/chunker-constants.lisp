@@ -17,7 +17,7 @@
     (AND 
      (? OR PDT)
      (OR DT PRP PRP$ WDT WP WP$)
-     (* OR VBG VBD VBN JJ JJR JJS \, CC)
+     (* OR VBG VBD VBN JJ JJR JJS \,);; CC)
 ;;     (OR 
      (+ OR NN NNS NNP NNPS CD))
 ;;      (AND (+ OR NN NNS NNP NNPS CD)
@@ -27,7 +27,7 @@
      (? OR PDT)
 ;;	(* OR JJ JJR JJS #\, CC NN NNS NNP NNPS CD)
 ;;	(last-1 OR NN NNS NNP NNPS CD))))
-     (* OR JJ JJR JJS \, CC)
+     (* OR JJ JJR JJS \,) ;; CC)
      (+ OR NN NNS NNP NNPS CD))
     EX PRP WP WDT))
 

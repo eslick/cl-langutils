@@ -115,8 +115,11 @@
 		     id)))))
       (number token))))
 
-(defun ids-for-tokens ( string )
-  (mapcar #'id-for-token (extract-words (mvretn 3 (tokenize-string string)))))
+(defun ids-for-tokens ( tokens )
+  (mapcar #'id-for-token tokens))
+
+(defun ids-for-string ( string )
+  (ids-for-tokens (extract-words (mvretn 3 (tokenize-string string)))))
 
 (defun token-for-id ( id )
   "Return a string token for a given token id"

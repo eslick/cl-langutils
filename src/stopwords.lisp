@@ -21,7 +21,7 @@
 (defvar *concise-stopwords* nil)
 
 (defun init-stopwords (&optional path)
-  (when (null path) (setf path (translate-logical-pathname "think:data;lang;en;langutils;stopwords.txt")))
+  (when (null path) (setf path "~/Work/fsrc/lisp/langutils/data/stopwords.txt"))
   (setf *stopwords* (make-hash-table :test #'equal :size 1000))
   (init-word-test)
   (with-open-file (f path :external-format :ascii)

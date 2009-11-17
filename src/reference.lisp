@@ -379,9 +379,15 @@
       (when newline (format stream "~%")))))
 
 (defun token-array->words (tokens)
-  (on-array (cons it rec) nil tokens))
+  (let ((words nil))
+    (map-across (lambda (word)
+		  (push word words))
+		tokens )
+    (nreverse words)))
+;;  (on-array (cons it rec) nil tokens))
 
 (defun phrase-words (phrase &optional index)
+  (assert phrase)
   (cond ((null index)
          (phrase-words phrase (phrase-start phrase)))
         ((>= index (1+ (phrase-end phrase)))
@@ -419,13 +425,14 @@
 	   (< (slot-value ph2 'end) (slot-value ph2 'start)))))
 
 (defmethod phrase-equal ((ph1 phrase) (ph2 phrase))
+  (declare (speed 3) (safety 1) (debug 0))
   (and (eq (phrase-length ph1) (phrase-length ph2))
        (loop 
 	 with text1 = (document-text (phrase-document ph1)) and
 	      text2 = (document-text (phrase-document ph2))
-	 for i from (phrase-start ph1) upto (phrase-end ph1) 
-	 for j from (phrase-start ph2) upto (phrase-end ph2) 
-	 finally (return t) 
+	 for i from (phrase-start ph1) upto (phrase-end ph1)
+	 for j from (phrase-start ph2) upto (phrase-end ph2)
+	 finally (return t)
 	 do
 	 (when (neq (aref text1 i) (aref text2 j))
 	   (return nil)))))

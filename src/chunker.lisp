@@ -35,10 +35,10 @@
    all supported primitive phrase types"
   (let ((nxs (get-nx-chunks doc interval))
 	(vxs (get-vx-chunks doc interval))
-;;	(axs (get-adverb-chunks doc interval))
+	(axs (get-adverb-chunks doc interval))
         (ps (get-pp-chunks doc interval)))
-    (append nxs vxs ;;axs
-	    ps)))
+    (sort (append nxs vxs axs ps)
+	  #'< :key #'phrase-start)))
 
 (defmethod get-imperative-chunks ((doc vector-document) &optional interval)
   (do-collect-vector-matches (start end #.(localize-expression
@@ -69,6 +69,32 @@
 		      :start (if interval (+ start (car interval)) start)
 		      :end (if interval (+ end (car interval)) end))))
   
+(defmethod get-extended-event-chunks1 ((doc vector-document) &optional interval)
+  "Return vx+nx+pp... objects"
+  (do-collect-vector-matches (start end #.(localize-expression `(and ,verb-pattern ,noun-pattern ,p-pattern ,noun-pattern) :package 'keyword))
+			     ((if interval
+				  (subseq (document-tags doc) (car interval) (cdr interval))
+				  (document-tags doc)))
+       (write-log chunker "Found extended event: ~A (~A : ~A)" (subseq (document-tags doc) start (1+ end)) start end)
+       (make-instance 'phrase
+		      :type :event
+		      :document doc
+		      :start (if interval (+ start (car interval)) start)
+		      :end (if interval (+ end (car interval)) end))))
+
+(defmethod get-extended-event-chunks2 ((doc vector-document) &optional interval)
+  "Return vx+nx+pp... objects"
+  (do-collect-vector-matches (start end #.(localize-expression `(and ,verb-pattern ,noun-pattern ,p-pattern ,noun-pattern ,p-pattern ,noun-pattern) :package 'keyword))
+			     ((if interval
+				  (subseq (document-tags doc) (car interval) (cdr interval))
+				  (document-tags doc)))
+       (write-log chunker "Found extended event: ~A (~A : ~A)" (subseq (document-tags doc) start (1+ end)) start end)
+       (make-instance 'phrase
+		      :type :event
+		      :document doc
+		      :start (if interval (+ start (car interval)) start)
+		      :end (if interval (+ end (car interval)) end))))
+
 
 (defmethod get-nx-chunks ((doc vector-document) &optional interval)
   "Return a list of all nx phrases"

@@ -61,7 +61,7 @@
 
 (defun clean-langutils ()
   (reset-token-counts)
-  (reset-token-tables)
+;;  (reset-token-tables)
   (initialize-tokens)
   (clean-lexicon)
   (clean-tagger)
