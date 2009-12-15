@@ -84,7 +84,7 @@
     nil)
   
   (defun duplicate-from ( source start end )
-    (declare (inline aref)
+    (declare ;;(inline aref)
 	     (type fixnum source start end)
 	     (optimize (speed 3) (safety 0) (debug 0) (space 0)))
     (loop for pos fixnum from start to (1- end) do

@@ -27,7 +27,7 @@
       "sec" "sep" "sq" "trans" "v" "var" "viz" "vol" "vols" "vs"
       "yd" "yrs")))
 
-(defun ctoi (d) (- (char-code d) #.(char-code #\0)))
+;;(defun ctoi (d) (- (char-code d) #.(char-code #\0)))
 (deftype digit () '(member #\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9))
 (deftype non-digit () '(not (member #\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9)))
 (deftype non-digit-or-ws () '(not (or whitespace non-digit)))
@@ -85,7 +85,7 @@
   (declare (type fixnum index start)
 	   (type character ch ws)
 	   (type boolean sentence?)
-	   (inline peek-char read-char char)
+;;	   (inline peek-char read-char char)
 	   (optimize (speed 3) (safety 0) (debug 1)))
   (with-stream-meta (str stream)
       (macrolet ((copy-fragment ()
@@ -137,7 +137,7 @@
 				    t)))
 	;; BACKUP AND CLEANUP MISPARSED TOKEN SEQUENCES & IDENTIFY POTENTIAL SENTENCE BOUNDARIES
 	(labels ((process-token-inline (&aux (write-index index))
-                   (declare (inline peek-char)
+                   (declare ;;(inline peek-char)
 			    (type fixnum write-index start index)
 			    (optimize speed (safety 0)))
 		   (when (= start index) (return-from process-token-inline t))
@@ -154,15 +154,15 @@
 						       (or (eq code (char-code #\_))
 							   (eq code (char-code #\-))))))
 				     (swap (a b &aux temp)
-					   (declare (optimize speed (safety 0))
-						    (inline char))
+					   (declare (optimize speed (safety 0)))
+;;						    (inline char))
 					   (setf temp (char result a))
 					   (setf (char result a) (char string b))
 					   (setf (char result b) temp))
 				     (write-newline (pos)
 						    (declare (type fixnum pos)
-							     (optimize speed (safety 0))
-							     (inline char))
+							     (optimize speed (safety 0)))
+;;							     (inline char))
 						    (setf (char result pos) #\Newline))
 				     ;; Go back to provided write ptr and walk forward to the
 				     ;; original 'end' of valid data removing any spaces and
@@ -233,7 +233,7 @@
 				     ;; Keep tokens shortened using periods U.S.A, Ian S. Eslick, and so on
 				     (fix-periods (&aux (old-index index) a)
 						  (declare (optimize speed (safety 0))
-							   (inline aref char)
+;;							   (inline aref char)
 							   (type string result)
 							   (type fixnum old-index index))
 ;;							   (type character a ws))
@@ -282,7 +282,7 @@
 				(setq sentence? nil)
 				t))
 	  ;; PROCESS THE STREAM INPUT
-	  (declare (dynamic-extent process-token-inline))
+	  (declare (dynamic-extent #'process-token-inline))
 	  (when fragment (copy-fragment))
 	  (handler-case
 	      (meta-match 

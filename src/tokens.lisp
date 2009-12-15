@@ -223,8 +223,8 @@
    for lingustic processing or if non-alpha-nums are present"
   (let ((nums 0)
 	(others 0))
-    (declare (type fixnum nums others it)
-	     (inline alpha-char-p digit-char-p)
+    (declare (type fixnum nums others)
+;;	     (inline alpha-char-p digit-char-p)
 	     (optimize speed (safety 1)))
     (loop for it across string do
       (cond ((alpha-char-p it) nil)

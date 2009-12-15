@@ -149,7 +149,6 @@
   (aif-ret (lookup-canonical-concept-instance tokens)
 	   (make-concept tokens)))
 
-(declaim (inline make-concept))
 (defun-exported make-concept (ta)
   (register-new-concept-instance (make-instance 'concept :token-vector ta)))
 

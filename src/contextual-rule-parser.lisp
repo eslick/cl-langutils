@@ -24,8 +24,8 @@
    (\"SURROUNDTAG\" (match (0 oldtag) (-1 tag1) (+1 tag2)) => 
                     (setf oldtag newtag))"
   `(defun ,name (pattern)
-     (declare (optimize (speed 3) (safety 0) (debug 0))
-	      (inline svref aref))
+     (declare (optimize (speed 3) (safety 0) (debug 0)))
+;;	      (inline svref aref))
      (let ((name (string-upcase (third pattern))))
        (cond ,@(mapcar #'gen-rule-closure template-list)
 	     (t (write-log tagger-contextual "Unrecognized rule: ~A" (first pattern)))))))

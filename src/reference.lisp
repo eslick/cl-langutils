@@ -39,7 +39,6 @@
 
 ;; Document accessors
 
-;;(declaim (inline get-tag get-word))
 (defmethod get-token-id ((doc vector-document) offset)
   (aref (document-text doc) offset))
 (defmethod get-tag ((doc vector-document) offset)
@@ -425,7 +424,7 @@
 	   (< (slot-value ph2 'end) (slot-value ph2 'start)))))
 
 (defmethod phrase-equal ((ph1 phrase) (ph2 phrase))
-  (declare (speed 3) (safety 1) (debug 0))
+  (declare (optimize (speed 3) (safety 1) (debug 0)))
   (and (eq (phrase-length ph1) (phrase-length ph2))
        (loop 
 	 with text1 = (document-text (phrase-document ph1)) and

@@ -233,7 +233,6 @@
 				    pairs))
 			 (rec (car phrases) (cdr phrases)))
 			(t (rec (car phrases) (cdr phrases))))))
-      (declare (inline following-noun))
       (rec (car phrases) (cdr phrases)))))
 
 

@@ -103,15 +103,15 @@ Dictionary for resolving symbolic labels to integers
 	 (when (null patterns) (error "No patterns found.~%"))
 	 (hash-put (vector-group-rules ,gsym)
 		   ,name
-		   ,(construct-make-vp (get-group gname) patterns consequent)
+		   ,(construct-make-vp (get-group gname) patterns consequent))))))
 		   
 (defun construct-make-vp (group patterns consequent)
   (make-vector-pattern 
    :filter-proc #'(lambda ,(vector-group-vector-names (get-group group))
-		    (declare (inline match-vectors))
+;;		    (declare (inline match-vectors))
 		    ,@(get-vector-declarations group
 					       (and ,@(mapcar #'(lambda (vsym)
-								  `(match-vectors ,vname (cdr (assoc ,vname ,patterns)))))))))
+								  `(match-vectors ,vname (cdr (assoc ,vname ,patterns))))))))
    :result-proc #'(lambda ,(vector-group-vector-names (get-group group))
 		    ,@consequent)
    :patterns ,patterns))
