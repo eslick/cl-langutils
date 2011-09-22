@@ -1,13 +1,12 @@
-======================================================
-                LANGUTILS LIBRARY
-======================================================
+LANGUTILS LIBRARY
+=================
 
-This file contains a simple guide to the main functions and files
-of the langutils library.  The code is reasonably documented with
-doc strings and inline comments.  Write to the author if there
-are any questions: eslick@media.mit.edu (Ian Eslick).  Also peruse
-the LISP2005-langutils.pdf which is a more involved exposition of
-the implementation and performance issues in the toolkit.
+This file contains a simple guide to the main functions and files of
+the langutils library.  The code is reasonably documented with doc
+strings and inline comments.  Write to the author if there are any
+questions.  Also read [docs/LISP2005-langutils.pdf](http://github.com/eslick/langutils/blob/master/docs/LISP2005-langutils.pdf?raw=true)
+which is a more involved exposition of the implementation and
+performance issues in the toolkit.
 
 The library provides a heirarchy of major functions and auxiliary
 functions related to the structured analysis and processing of 
@@ -17,17 +16,19 @@ open text.  The major functions working from raw text up are:
 - Part of speech tagging (string -> tokens -> vector-document)
 - Phrase chunking (vector-document -> phrases)
 
-We also provide auxiliary functions that operate on strings,
-tokens or vector-documents.  The lisp functions implementing
-the functionality can be found under the appropriately labled
-section in the reference below.
+We also provide auxiliary functions that operate on strings, tokens or
+vector-documents.  The lisp functions implementing the functionality
+can be found under the appropriately labled section in the reference
+below.
 
-Strings:
+## Strings
+
 - Tokenize a string (separate punctuation from word tokens)
 - POS tag a string or file returning a file, string or vector-document
 - Identify suspicious strings that may become tokens
 
-Tokens:
+## Tokens
+
 - String to token-id conversion routines
 - Save/Load token maps
 - Guess the POS tag for a token (lexicon-based, also includes the porter stemmer)
@@ -38,23 +39,22 @@ Tokens:
 - Lemmatize a token (find the root lemma for a given surface form)
 - Generate all surface forms of a root word
 
-Vector-Documents:
+## Vector-Documents:
+
 - Generate phrases using the regex chunker
 
-Miscellaneous:
-- Concept representation
-  Simple lemmatized noun or verb phrases can be treated as equal abstract notions;
-  provides a CLOS class wrapper.
+## Miscellaneous:
+
+- Concept representation: A simple lemmatized noun or verb phrases can
+  be treated as equal abstract notions; provides a CLOS class wrapper.
 
 
 
-=================================================
-           INTERFACE REFERENCE
-=================================================
+INTERFACE REFERENCE
+===================
 
 This documents the important functions of the langutils toolkit.
 Documentation entries are of the form:
-
 
 ----------------------------------------------------------------------
 function( args )
@@ -73,9 +73,7 @@ Functions are explicitely referenced by putting () around them; variables or
 parameters have the form of *<name>*. 
 
 
-:::::::::::::::::::::::::::::::::
-:::: TOKENS and TOKENIZATION ::::
-:::::::::::::::::::::::::::::::::
+TOKENS and TOKENIZATION
 
 ----------------------------------------------------------------------
 tokenize-stream (stream &key (by-sentence nil) (fragment ""))
@@ -111,9 +109,11 @@ Notes:
 tokenize-string (string)
 ----------------------------------------------------------------------
 Input:
-string - a string of English natural language text
+
+- string - a string of English natural language text
 
 Output: (string)
+
 Returns a string which is the result of calling (tokenize-stream) on
 the stream version of the input string.
 
@@ -122,15 +122,17 @@ the stream version of the input string.
 tokenize-file (source target &key (if-exists :supersede))
 ----------------------------------------------------------------------
 Input:
-source - The source file name as a string or pathname
-target - The target file name as a string or pathname
+
+- source - The source file name as a string or pathname
+- target - The target file name as a string or pathname
 
 
 ----------------------------------------------------------------------
 id-for-token ( token )
 ----------------------------------------------------------------------
 Input:
-token - A string representing a primitive token
+
+- token - A string representing a primitive token
 
 Output:
 A fixnum providing a unique id for the provided string token.  
@@ -146,7 +148,8 @@ representation.
 token-for-id ( id )
 ----------------------------------------------------------------------
 Input:
-id - A fixnum id
+
+- id - A fixnum id
 
 Output:
 The original token string.
@@ -156,7 +159,8 @@ The original token string.
 tokens-for-id ( ids )
 ----------------------------------------------------------------------
 Input:
-ids - A list of fixnum ids
+
+- ids - A list of fixnum ids
 
 Output:
 A list of string representations of the each id
@@ -166,7 +170,8 @@ A list of string representations of the each id
 save-token-map ( filename )
 ----------------------------------------------------------------------
 Input:
-filename - A path or string to save token information to
+
+- filename - A path or string to save token information to
 
 Output:
 t on success or nil otherwise
@@ -180,7 +185,8 @@ which can be set via the asdf-config parameter 'token-map'
 load-token-map ( filename )
 ----------------------------------------------------------------------
 Input:
-filename - A path or string to save token information to
+
+- filename - A path or string to save token information to
 
 Output:
 t on success or nil otherwise
@@ -194,7 +200,8 @@ which can be set via the asdf-config parameter 'token-map'
 suspicious-word? ( word )
 ----------------------------------------------------------------------
 Input:
-A fixnum id for a word to test
+
+- word - A fixnum id for a word to test
 
 Output:
 A boolean representing whether this word has been labelled as fishy
@@ -204,7 +211,8 @@ A boolean representing whether this word has been labelled as fishy
 suspicious-string? ( string )
 ----------------------------------------------------------------------
 Input:
-A string
+
+- string - Any string
 
 Output:
 A boolean representing whether the word is fishy as determined by
@@ -213,16 +221,15 @@ characters in the token).  This is used inside id-for-token to
 keep the hash for suspicious-word? up to date.
 
 
-::::::::::::::::::::::::::::::::::::::::::::::
-:::: POS TAGGING AND OPERATIONS ON TOKENS ::::
-::::::::::::::::::::::::::::::::::::::::::::::
-
+POS TAGGING AND OPERATIONS ON TOKENS
+====================================
 
 ----------------------------------------------------------------------
 tag ( string )
 ----------------------------------------------------------------------
 Input:
-string - An input string to tag.  Input should be less than 100k 
+
+- string - An input string to tag.  Input should be less than 100k 
          characters if possible.
 
 Output:
@@ -238,7 +245,8 @@ properly tokenized in advance.
 tag-tokenized ( string )
 ----------------------------------------------------------------------
 Input:
-string - An input string to tag.  The string is assumed to be tokenized
+
+- string - An input string to tag.  The string is assumed to be tokenized
   already and should be less than 100k bytes in size
 
 Output:
@@ -248,7 +256,8 @@ A tagged string as in 'tag' above.
 vector-tag ( string )
 ----------------------------------------------------------------------
 Input:
-string - as in tag above
+
+- string - as in tag above
 
 Output:
 A CLOS object of type vector-document with the token array initialized
@@ -260,8 +269,9 @@ with symbols represented the selected tags.
 vector-tag-tokenized ( string &key end-tokens )
 ----------------------------------------------------------------------
 Input:
-string - as in tag-tokenized above
-end-tokens - A list of string tokens to add to the end of the tokenization
+
+- string - as in tag-tokenized above
+- end-tokens - A list of string tokens to add to the end of the tokenization
    array.  Sometimes this is useful to ensure a closing period if you are
    doing tagging of structured NL data
 
@@ -275,7 +285,8 @@ As in tag and tag-tokenized, this interface does not tokenize the input string.
 get-lexicon-entry ( word )
 ----------------------------------------------------------------------
 Input:
-word - Token id or token string
+
+- word - Token id or token string
 
 Output:
 A lexicon-entry structure related to the lexical characteristics of the token
@@ -292,7 +303,8 @@ package, however.
 initial-tag ( token )
 ----------------------------------------------------------------------
 Input:
-token - A string token
+
+- token - A string token
 
 Output:
 A keyword symbol of the initially guessed tag (:PP :NN, etc)
@@ -306,7 +318,8 @@ information of the provided string token.
 read-file-as-tagged-document ( file )
 ----------------------------------------------------------------------
 Input:
-A string filename or path object
+
+- file - A string filename or path object
 
 Output:
 A vector-document representing the tagged contents of file
@@ -318,7 +331,8 @@ Loads the file into a string then calls vector-tag
 read-and-tag-file ( file )
 ----------------------------------------------------------------------
 Input:
-A path string or a path object
+
+- file - A path string or a path object
 
 Output:
 A string with tag annotations of the contents of file
@@ -331,10 +345,11 @@ Uses tag on the string contents of file
 get-lemma ( word &key pos (noun t) porter )
 ----------------------------------------------------------------------
 Input:
-word - String of the word to find the lemma for
-pos - The part of speech of the lemma to return (nil otherwise)
-noun - Whether to stem nouns to the singular form
-porter - Whether to use the porter algorithm if a word is unknown
+
+- word - String of the word to find the lemma for
+- pos - The part of speech of the lemma to return (nil otherwise)
+- noun - Whether to stem nouns to the singular form
+- porter - Whether to use the porter algorithm if a word is unknown
 
 Output:
 A string representing the lemma of the word, if found
@@ -344,10 +359,11 @@ A string representing the lemma of the word, if found
 get-lemma-for-id ( id &key pos (noun t) porter )
 ----------------------------------------------------------------------
 Input:
-id - The token id to find the lemma of
-pos - As above
-noun - ""
-porter - ""
+
+- id - The token id to find the lemma of
+- pos - As above
+- noun - ""
+- porter - ""
 
 Output:
 The lemma id
@@ -356,12 +372,13 @@ The lemma id
 lemmatize ((sequence list/array) &key strip-det pos (noun t) porter last-only )
 ----------------------------------------------------------------------
 Input:
-list/array - The input sequence of token ids as a list or an array
-strip-det - Remove determiners from the sequence
-pos - Part of speech of root of terms
-noun - Whether to stem nouns
-porter - Whether to use the porter stemmer
-last-only - lemmatize the last token in the sequence only
+
+- list/array - The input sequence of token ids as a list or an array
+- strip-det - Remove determiners from the sequence
+- pos - Part of speech of root of terms
+- noun - Whether to stem nouns
+- porter - Whether to use the porter stemmer
+- last-only - lemmatize the last token in the sequence only
 
 Output:
 Return the lemmatized list of tokens
@@ -375,8 +392,9 @@ fixnum values only.  Useful for getting the lemmatization of short phrases.
 morph-surface-forms ( root &optional pos-class )
 ----------------------------------------------------------------------
 Input:
-root - The root form to expand
-pos-class - if provided (V - verb, N - noun, A - Adverb) the class of 
+
+- root - The root form to expand
+- pos-class - if provided (V - verb, N - noun, A - Adverb) the class of 
             surface forms to generate
 
 Output:
@@ -394,7 +412,8 @@ String to string form of the above function
 stopword? ( id )
 ----------------------------------------------------------------------
 Input:
-id - Input token id
+
+- id - Input token id
 
 Output:
 boolean 
@@ -403,7 +422,8 @@ boolean
 concise-stopword? ( id )
 ----------------------------------------------------------------------
 Input:
-id - Input token id
+
+- id - Input token id
 
 Output:
 boolean
@@ -412,7 +432,8 @@ boolean
 contains-is? ( ids )
 ----------------------------------------------------------------------
 Input:
-ids - a list of fixnum token ids
+
+- ids - a list of fixnum token ids
 
 Output:
 boolean
@@ -424,18 +445,19 @@ A sometimes useful utility.  Searches the list for the token for 'is'
 ----------------------------------------------------------------------
 string-stopword?, string-concise-stopword?, string-contains-is? ( string )
 ----------------------------------------------------------------------
+
 The three above functions but accepting string or list of string arguments
 
 
-::::::::::::::::::
-:::: CHUNKING ::::
-::::::::::::::::::
+CHUNKING
+===========
 
 ----------------------------------------------------------------------
 chunk ( text )
 ----------------------------------------------------------------------
 Input:
-Text - raw string text
+
+- Text - raw string text
 
 Output:
 A list of phrases referencing a document created from the text
@@ -447,7 +469,8 @@ Runs the tokenizer on the text prior to POS tagging
 chunk-tokenized ( text )
 ----------------------------------------------------------------------
 Input:
-text - raw string text
+
+- text - raw string text
 
 Output:
 A list of phrases referencing a document created from the text
@@ -459,29 +482,26 @@ Does not run the tokenizer on text prior to POS tagging
 get-all-chunks ( doc )
 ----------------------------------------------------------------------
 Input:
-doc - a vector-document
+
+- doc - a vector-document
 
 Output:
 A list of chunks of all the primitive types (verb, adverb, preps and nouns)
 
-----------------------------------------------------------------------
-get-nx-chunks ( doc )
-get-vx-chunks ( doc )
-get-ax-chunks ( doc )
-get-pp-chunks ( doc )
-get-event-chunks ( doc )
-get-verb-arg-chunks ( doc )
-----------------------------------------------------------------------
-Input:
-A vector-document
+Related functions:
 
-Output:
-A list of phrases each of which references a segment of the
-vector document array believed to be a phrase of type (phrase-type doc)
+- get-nx-chunks ( doc )
+- get-vx-chunks ( doc )
+- get-ax-chunks ( doc )
+- get-pp-chunks ( doc )
+- get-event-chunks ( doc )
+- get-verb-arg-chunks ( doc )
 
 Notes:
+
 - Events are concatenated verb-noun chunks
 - verb-arg chunks look for verb-pp-noun chunk groups
+
 These two functions could search over sequences of phrases, but
 usually those are done alone and not on top of a more primitive
 verb, noun, adverb decomposition.  Also note that common preposition 
@@ -491,49 +511,49 @@ where sNP is a special type of NP instead of the usual VP-P-NP
 verb-arg formulation)
 
 
-::::::::::::::::::
-:::: CONCEPTS ::::
-::::::::::::::::::
+CONCEPTS
+========
 
 Concepts are a CLOS abstraction over token sequences that establishes
 identity over lemmatized phrases.  This supports special applications
 (ConceptNet, LifeNet) at the MIT Media Lab but might be more generally
-useful.  
+useful.
 
 ----------------------------------------------------------------------
 concept
 ----------------------------------------------------------------------
-A clos object with the following operations:
-concept->words - Return a list of token strings
-concept->string - Return a string representing the concept
-concept->token-array - Return an array representing the concept
-phrase->concept - Create a concept from a phrase
-words->concept - Create a concept from a list of token ids
-token-array->concept - ""
-associate-concepts - Take a list of phrases, lists or token-arrays and find the concept
+The 'concept' is a clos object with the following methods
+
+- concept->words - Return a list of token strings
+- concept->string - Return a string representing the concept
+- concept->token-array - Return an array representing the concept
+- phrase->concept - Create a concept from a phrase
+- words->concept - Create a concept from a list of token ids
+- token-array->concept - ""
+- associate-concepts - Take a list of phrases, lists or token-arrays and find the concept
    the they represent.  Returns a list of pairs of the form (phrase concept)
-conceptually-equal - equal under lemmatization and with phrases, arrays of tokens
-concept-contains - subset relations
+- conceptually-equal - equal under lemmatization and with phrases, arrays of tokens
+- concept-contains - subset relations
 
 
 ----------------------------------------------------------------------
 lookup-canonical-concept-instance ( ta )
 ----------------------------------------------------------------------
 Input:
-A token array or list of tokens
+
+- ta - A token array or list of tokens
 
 Output:
 A concept instance
 
 
-=================================================
-             EXAMPLE USES
-=================================================
+EXAMPLE USES
+============
 
 See the file example.lisp.  This shows basic use of the tagger, 
 tokenizer, lemmatizer and chunker interfaces.  
 
-More examples of use can be generated if enough mail is sent to 
-the author to invoke a guilt-driven re-release of the library 
-with improved documentation.
+More examples of use can be generated if enough mail is sent to the
+author to invoke a guilt-driven re-release of the library with
+improved documentation.
 
