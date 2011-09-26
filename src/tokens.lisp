@@ -81,9 +81,11 @@
 ;; API
 ;;
 
-(defconstant *whitespace-chars* '(#\space #\tab #\return #\linefeed
-				  #+allegro #\%space
-				  #+lispworks #\No-Break-Space))
+(defconstant *whitespace-chars* 
+  (if (boundp '*whitespace-chars*) (symbol-value '*whitespace-chars*) 
+      '(#\space #\tab #\return #\linefeed
+	#+allegro #\%space
+	#+lispworks #\No-Break-Space)))
 
 (defun id-for-token ( token &optional (trim t) )
   "This takes string 'tokens' and 

@@ -11,14 +11,15 @@
     :description "Language utilities"
     :version "1.0"
     :author "Ian Eslick"
-    :licence "LLGPL (Franz Inc's modification to LGPL)"
-    :depends-on (:meta :s-xml-rpc :stdutils)
+    :licence "BSD"
+    :depends-on (:s-xml-rpc :stdutils)
     :components ((:module "src"
 			  :components ((:file "package")
 				       (:file "config")
 				       (:file "tokens")
 				       (:file "reference")
 				       (:file "stopwords")
+				       (:file "my-meta")
 				       (:file "tokenize")
 				       (:file "lexicon")
 				       (:file "lemma")

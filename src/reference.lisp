@@ -54,7 +54,7 @@
 
 (defmethod set-annotation ((doc vector-document) key value &key (method :override))
   "Add an annotation to object using method :override, :push, :duplicate-key"
-  (flet ((set-on-empty () (assoc-setf (document-annotations doc) key value)))
+  (flet ((set-on-empty () (assoc-setf (document-annotations doc) key value 'eq)))
     (case method
       (:override 
 	(aif (assoc key (document-annotations doc))

@@ -2,10 +2,29 @@
 
 ;; Language utilities asd files
 
+(defpackage :my-meta
+  (:use #:common-lisp)
+  (:export #:with-string-meta
+           #:with-list-meta
+           #:with-stream-meta
+           #:enable-meta-syntax
+           #:disable-meta-syntax
+           #:index
+           #:end
+           #:meta-match))
 
+(defpackage #:langutils-tokenize
+  (:use #:cl #:my-meta)
+  (:export tokenize-stream
+	   tokenize-string
+	   tokenize-file))
 
 (defpackage #:langutils
-  (:use #:cl #:meta #:stdutils) ;; #:s-serialization)
+  (:use #:cl #:stdutils)
+  (:import-from :langutils-tokenize 
+		tokenize-stream
+		tokenize-string
+		tokenize-file)
   (:export   ;; initialization
            init-langutils
 	   clean-langutils

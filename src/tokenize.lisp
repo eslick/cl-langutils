@@ -9,9 +9,9 @@
 ;;;; Date Started:  September 2004
 ;;;;
 
-(in-package :langutils)
+(in-package :langutils-tokenize)
 
-(eval-when (compile eval load)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (defvar known-abbreviations 
     '("Apr" "Assn" "Aug" "Av" "Ave" "Bldg" "Cf" "Co"
       "Corp" "Ct" "Dec" "Dept" "Dist" "Dr" "Eq" "Feb" "Fig" "Figs"
@@ -70,6 +70,7 @@
 
 ;; Reads a stream into a string
 #.(enable-meta-syntax)
+
 (let* ((length 1024)
        (result (make-array length :element-type 'character :adjustable t)))
   (declare (type fixnum length))
@@ -154,7 +155,7 @@
 						       (or (eq code (char-code #\_))
 							   (eq code (char-code #\-))))))
 				     (swap (a b &aux temp)
-					   (declare (optimize speed (safety 0)))
+					   (declare (optimize speed (safety 1)))
 ;;						    (inline char))
 					   (setf temp (char result a))
 					   (setf (char result a) (char string b))
@@ -162,7 +163,7 @@
 				     (write-newline (pos)
 						    (declare (type fixnum pos)
 							     (optimize speed (safety 0)))
-;;							     (inline char))
+;;							     (inline char)))
 						    (setf (char result pos) #\Newline))
 				     ;; Go back to provided write ptr and walk forward to the
 				     ;; original 'end' of valid data removing any spaces and
@@ -196,7 +197,7 @@
 				     (fix-will (&aux (old-index index)) 
 					       (or
 						(meta-match
-						 [#\Space #\' #\Space #\l #\l !(delete-spaces (- index 3) 1)])
+						 [ #\Space #\' #\Space #\l #\l !(delete-spaces (- index 3) 1)])
 						 (progn (setq index old-index) nil)))
 				     ;; Fix possessives such as Fred (Fred ' s -> Fred's)
 				     (fix-poss (&aux (old-index index) a d) 
@@ -307,9 +308,12 @@
   (with-input-from-string (s string)
     (tokenize-stream s)))
 
-(defun tokenize-file (source target &key (if-exists :supersede))
-  (write-to-file (mvretn 3 (tokenize-string (read-file-to-string source)))
-		 target))
+;;(defun tokenize-file (source target &key (if-exists :supersede))
+;;  (?write-to-file 
+;;   (stdutils:mvretn 3 
+;;     (tokenize-string 
+;;      (stdutils:read-file-to-string source)))
+;;   target))
     
 
 ;; NOTE: Broken?  9/22/2004
