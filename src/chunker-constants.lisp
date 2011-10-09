@@ -34,8 +34,8 @@
 	EX PRP WP WDT)))
 
 (defconstant verb-pattern
-  (if (boundp 'noun-pattern)
-      (symbol-value 'noun-pattern)
+  (if (boundp 'verb-pattern)
+      (symbol-value 'verb-pattern)
       '(and 
 	(* or RB RBR RBS WRB)
 	(? or MD)
@@ -52,14 +52,14 @@
 ;;     (+ or JJ JJR JJS)
 ;;     (* or RB RBR RBS JJ JJR JJS)
 ;;;     (+ or JJ JJR JJS))
-  (if (boundp 'noun-pattern)
-      (symbol-value 'noun-pattern)
+  (if (boundp 'adv-pattern)
+      (symbol-value 'adv-pattern)
       '(and 
 	(* or RB RBR RBS)
 	(+ or JJ JJR JJS))))
 
 (defconstant p-pattern
-  (if (boundp 'noun-pattern)
-      (symbol-value 'noun-pattern)
+  (if (boundp 'p-pattern)
+      (symbol-value 'p-pattern)
       '(and (+ or IN))))
 	
